@@ -1,0 +1,14 @@
+body{
+    background-color: rgb(187, 169, 169);
+}
+
+.title{
+    text-align: center;
+    font-size: 30px;
+}
+
+img{
+    width: 500px;
+    height: 500px;
+    margin: 50px;
+}
