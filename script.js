@@ -1,57 +1,82 @@
-const akanNames = {
-  0: { day: "Sunday",    male: "Kwasi",   female: "Akosua" },
-  1: { day: "Monday",    male: "Kwadwo",  female: "Adwoa" },
-  2: { day: "Tuesday",   male: "Kwabena", female: "Abena" },
-  3: { day: "Wednesday", male: "Kwaku",   female: "Akua" },
-  4: { day: "Thursday",  male: "Yaw",     female: "Yaa" },
-  5: { day: "Friday",    male: "Kofi",    female: "Afua" },
-  6: { day: "Saturday",  male: "Kwame",   female: "Ama" }
-};
+//Male Akan names
+const maleNames = [
+    "Kwasi", // Sunday
+    "Kwadwo", //Monday
+    "Kwabena", //Tuesday
+    "Kwaku", //Wednesday
+    "Yaw", //Thursday
+    "Kofi", //Friday
+    "Kwame" //Saturday
+];
 
-const form = document.querySelector(".form-box");
-const resultsDiv = document.getElementById("results");
+//Female Akan Names
+const femaleNames = [
+    "Akosua", //Sunday
+    "Adwoa", //Monday
+    "Abenaa", //Tuesday
+    "Akua", //Wednesday
+    "Yaa", //Thursday
+    "Afua", //Friday
+    "Ama" //Saturday
+];
 
-function daysInMonth(month, year) {
-  return new Date(year, month, 0).getDate();
-}
+const form = document.getElementById("akanForm");
+const results = document.getElementById("results");
 
-function showError(message) {
-  resultsDiv.innerHTML = `<p class="error">${message}</p>`;
-}
+form.addEventListener("submit", function (event) {
+    event.preventDefault();
 
-function showResult(info, name) {
-  resultsDiv.innerHTML = `
-    <div class="result-card">
-      <p class="day">You were born on a ${info.day}</p>
-      <p class="name">${name}</p>
-      <p class="day">Your Akan day-name</p>
-    </div>
-  `;
-}
+    const day = Number(document.getElementById("day").value);
+    const month = Number(document.getElementById("month").value);
+    const year = Number(document.getElementById("year").value);
 
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
+    // Check for a valid date
+    const birthDate = new Date(year, month - 1, day);
 
-  const day = parseInt(document.getElementById("day").value, 10);
-  const month = parseInt(document.getElementById("month").value, 10);
-  const year = parseInt(document.getElementById("year").value, 10);
-  const genderInput = document.getElementById("gender");
-  const gender = genderInput ? genderInput.value : "male";
+    if (
+        birthDate.getFullYear() !== year ǀǀ
+        birthDate.getMonth() !== month ǀǀ
+        birthDate.getDate() !== day 
+    ) {
+        results.innerHTML = "<p>Please enter a valid date.</p>";
+        return;
+    }
 
-  if (!day || !month || !year) {
-    showError("Please fill in day, month, and year.");
-    return;
-  }
+    //Ask the user for gender
+    const gender = prompt("Enter your gender (male/female):");
 
-  if (day > daysInMonth(month, year)) {
-    showError("That day doesn't exist in the given month/year.");
-    return;
-  }
+    if(!gender) {
+        results.innerHTML = "<p>Please enter your gender.</p>";
+        return;
+    }
 
-  const date = new Date(year, month - 1, day);
-  const weekday = date.getDay();
-  const info = akanNames[weekday];
-  const name = gender === "female" ? info.female : info.male;
+    const dayOfWeek = birthDate.getDay();
 
-  showResult(info, name);
+    let akanName;
+
+    if (gender.toLowerCase() === "male") {
+        akanName = maleNames[dayOfWeek];
+    } else if (gender.toLowerCase() === "female") {
+        akanName = femaleNames[dayOfWeek];
+    } else {
+        results.innerHTML = "<p>Please enter either 'male' or 'female'.</p>";
+        return;
+    }
+
+    const weekDays = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+    ];
+
+    results.innerHTML = `
+<h3>Your Results</h3>
+<p>You were born on <strong>${weekDays[dayOfWeek]}</strong>.</p>
+<p>Your Akan name is <strong>${akanName}</strong>.</p>
+`;
+
 });
