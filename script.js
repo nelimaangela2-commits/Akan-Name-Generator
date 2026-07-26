@@ -20,6 +20,17 @@ const femaleNames = [
     "Ama" //Saturday
 ];
 
+//Days of the week
+const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+];
+
 const form = document.getElementById("akanForm");
 
 form.addEventListener("submit", function(event){
@@ -62,6 +73,8 @@ form.addEventListener("submit", function(event){
 
     const index = ((Math.floor(dayOfWeek) % 7) + 7) % 7;
 
+    const birthDay = daysOfWeek[index];
+
     let akanName;
 
     if(gender.value === "male"){
@@ -71,5 +84,5 @@ form.addEventListener("submit", function(event){
     }
 
     document.getElementById("result").textContent =
-        `Your Akan name is ${akanName}!`;
+        `You were born on ${birthDay}. Your Akan name is ${akanName}!`;
 });
