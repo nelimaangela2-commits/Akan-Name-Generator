@@ -1,6 +1,6 @@
 //Male Akan names
 const maleNames = [
-    "Kwasi", // Sunday
+    "Kwasi", //Sunday
     "Kwadwo", //Monday
     "Kwabena", //Tuesday
     "Kwaku", //Wednesday
@@ -9,7 +9,7 @@ const maleNames = [
     "Kwame" //Saturday
 ];
 
-//Female Akan Names
+//Female Akan names
 const femaleNames = [
     "Akosua", //Sunday
     "Adwoa", //Monday
@@ -21,62 +21,55 @@ const femaleNames = [
 ];
 
 const form = document.getElementById("akanForm");
-const results = document.getElementById("results");
 
-form.addEventListener("submit", function (event) {
+form.addEventListener("submit", function(event){
+
     event.preventDefault();
 
-    const day = Number(document.getElementById("day").value);
-    const month = Number(document.getElementById("month").value);
-    const year = Number(document.getElementById("year").value);
+    const day = parseInt(document.getElementById("day").value);
+    const month = parseInt(document.getElementById("month").value);
+    const year = parseInt(document.getElementById("year").value);
 
-    // Check for a valid date
-    const birthDate = new Date(year, month - 1, day);
+    const gender = document.querySelector('input[name="gender"]:checked');
 
-    if (
-        birthDate.getFullYear() !== year ǀǀ
-        birthDate.getMonth() !== month ǀǀ
-        birthDate.getDate() !== day 
-    ) {
-        results.innerHTML = "<p>Please enter a valid date.</p>";
+    // Validation
+    if(day < 1 || day > 31){
+        alert("Enter a valid day.");
         return;
     }
 
-    //Ask the user for gender
-    const gender = prompt("Enter your gender (male/female):");
-
-    if(!gender) {
-        results.innerHTML = "<p>Please enter your gender.</p>";
+    if(month < 1 || month > 12){
+        alert("Enter a valid month.");
         return;
     }
 
-    const dayOfWeek = birthDate.getDay();
+    if(!gender){
+        alert("Please select a gender.");
+        return;
+    }
+
+    // Split year
+    const CC = Math.floor(year / 100);
+    const YY = year % 100;
+
+    // Formula
+    const dayOfWeek = (
+        ((CC / 4) - (2 * CC) - 1 +
+        ((5 * YY) / 4) +
+        ((26 * (month + 1)) / 10) +
+        day)
+    );
+
+    const index = ((Math.floor(dayOfWeek) % 7) + 7) % 7;
 
     let akanName;
 
-    if (gender.toLowerCase() === "male") {
-        akanName = maleNames[dayOfWeek];
-    } else if (gender.toLowerCase() === "female") {
-        akanName = femaleNames[dayOfWeek];
-    } else {
-        results.innerHTML = "<p>Please enter either 'male' or 'female'.</p>";
-        return;
+    if(gender.value === "male"){
+        akanName = maleNames[index];
+    }else{
+        akanName = femaleNames[index];
     }
 
-    const weekDays = [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-    ];
-
-    results.innerHTML = `
-<h3>Your Results</h3>
-<p>You were born on <strong>${weekDays[dayOfWeek]}</strong>.</p>
-<p>Your Akan name is <strong>${akanName}</strong>.</p>
-`;
-
+    document.getElementById("result").textContent =
+        `Your Akan name is ${akanName}!`;
 });
